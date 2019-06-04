@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Axes;
 
 namespace IUPred2aPlotterApp
 {
@@ -14,7 +17,9 @@ namespace IUPred2aPlotterApp
         {
             ReadDataFile();
 
-            Print();
+            //Print();
+
+            Plot();
         }
 
         static void ReadDataFile()
@@ -82,7 +87,57 @@ namespace IUPred2aPlotterApp
 
                 i++;
 
-                if (i > 20000) break;
+                if (i > 20) break;
+            }
+        }
+    
+        static void Plot()
+        {
+            var model = new PlotModel { Title = "Scatte   rSeries" };
+            model.Axes.Add(new CustomLinearAxis { Position = AxisPosition.Bottom, Minimum = 1, Maximum = 335, MajorStep = 50, MaximumValue = 335 } );
+            model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Minimum = 0, Maximum = 1 });
+
+
+            var xaxis = new LinearAxis();
+            int i = 0;
+
+            foreach (var p in Proteins)
+            {
+                var series = new LineSeries { LineStyle = LineStyle.Solid, Color = OxyColor.FromArgb(5, 0, 0, 0) };
+
+                int x = 1;
+
+                foreach (var v in p.IUPred)
+                {
+                    series.Points.Add(new DataPoint(x, v));
+                    x++;
+                }
+
+                model.Series.Add(series);
+
+                i++;
+
+                if (i > 2000) break;
+            }
+
+
+            //var scatterSeries = new ScatterSeries { MarkerType = MarkerType.Circle };
+            //var r = new Random(314);
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    var x = r.NextDouble();
+            //    var y = r.NextDouble();
+            //    var size = r.Next(5, 15);
+            //    var colorValue = r.Next(100, 1000);
+            //    scatterSeries.Points.Add(new ScatterPoint(x, y, size, colorValue));
+            //}
+
+            //model.Series.Add(scatterSeries);
+
+            using (var stream = File.Create("Output.pdf"))
+            {
+                var pdfExporter = new PdfExporter { Width = 600, Height = 400 };
+                pdfExporter.Export(model, stream);
             }
         }
     }

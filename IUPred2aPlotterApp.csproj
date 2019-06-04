@@ -14,4 +14,7 @@
   <ItemGroup>
     <EmbeddedResource Include="IUPredData\data.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OxyPlot.Core" Version="1.0.0" />
+  </ItemGroup>
 </Project>
