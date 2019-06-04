@@ -38,5 +38,33 @@ namespace IUPred2aPlotterApp
 
             return dat;
         }
+
+
+
+        public void Smooth(float window = 5f)
+        {
+            int start = (int)((window - 1) / 2);
+
+            var tmp = new float[IUPred.Length];
+
+            for (int i = 0; i <= IUPred.Length - 1; i++)
+            {
+                float sum = 0;
+                int weigth = 0;
+
+                for (int l = -start; l <= start; l++)
+                {
+                    if (i + l >= 0 && i + l <= IUPred.Length - 1)
+                    {
+                        sum += IUPred[i + l];
+                        weigth++;
+                    }
+                }
+
+                tmp[i] = sum / weigth;
+            }
+
+            IUPred = tmp;
+        }
     }
 }

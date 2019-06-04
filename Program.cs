@@ -19,6 +19,8 @@ namespace IUPred2aPlotterApp
 
             //Print();
 
+            Smooth();
+
             Plot();
         }
 
@@ -90,6 +92,11 @@ namespace IUPred2aPlotterApp
                 if (i > 20) break;
             }
         }
+
+        static void Smooth()
+        {
+            foreach (var p in Proteins) p.Smooth();
+        }
     
         static void Plot()
         {
@@ -103,7 +110,7 @@ namespace IUPred2aPlotterApp
 
             foreach (var p in Proteins)
             {
-                var series = new LineSeries { LineStyle = LineStyle.Solid, Color = OxyColor.FromArgb(5, 0, 0, 0) };
+                var series = new LineSeries { LineStyle = LineStyle.Solid, Color = OxyColor.FromArgb(5, 0, 0, 0), StrokeThickness = 5 };
 
                 int x = 1;
 
@@ -119,20 +126,6 @@ namespace IUPred2aPlotterApp
 
                 if (i > 2000) break;
             }
-
-
-            //var scatterSeries = new ScatterSeries { MarkerType = MarkerType.Circle };
-            //var r = new Random(314);
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    var x = r.NextDouble();
-            //    var y = r.NextDouble();
-            //    var size = r.Next(5, 15);
-            //    var colorValue = r.Next(100, 1000);
-            //    scatterSeries.Points.Add(new ScatterPoint(x, y, size, colorValue));
-            //}
-
-            //model.Series.Add(scatterSeries);
 
             using (var stream = File.Create("Output.pdf"))
             {
